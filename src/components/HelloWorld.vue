@@ -9,9 +9,7 @@
           height="200"
         />
       </v-col>
-      <!-- {{pokemons}} -->
-      <!-- <p >{{pokemons}}</p> -->
-      <v-col v-for="n in 3" :key="n" class="mb-4 col-4">
+      <v-col class="mb-4 col-4">
         <v-card
           class="ma-2"
           v-for="(pokemon, id) in pokemons"
@@ -28,32 +26,35 @@
               tile
               size="80"
               color="grey"
-            ></v-list-item-avatar>
+              
+            >
+            <img 
+            v-bind:src="'https://raw.githubusercontent.com/Purukitto/pokemon-data.json/master/images/pokedex/thumbnails/' + getTrueArray(pokemon) + '.png'" alt="">
+            </v-list-item-avatar>
           </v-list-item>
 
           <v-card-actions>
-            <p class="ma-2">Type:
-            <v-p
+            <div class="ma-2">Type:
+            <p
               v-for="poki in pokemon['type']"
               :key="poki"
               outlined
               rounded
               text
-              >{{ poki + ' '}}</v-p
+              >{{ poki + ' '}}</p
             >
-            </p>
+            </div >
           </v-card-actions>
           <v-card-actions>
-            <p class="ma-2">Weakness:
-            <v-p
+            <div class="ma-2">Weakness:
+            <p
               v-for="weakness in getWeaknesses(pokemon)"
               :key="weakness"
               outlined
               rounded
               text
-              >{{ weakness + ' '}}</v-p
-            >
-            </p>
+              >{{ weakness + ' '}}</p>
+            </div>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -182,6 +183,17 @@ export default {
       });
       return weaknesses;
     },
+    getTrueArray(pokemon) {
+      if(pokemon.pokemon_id <= 9) {
+        return '00' + pokemon.pokemon_id
+      }
+      if (pokemon.pokemon_id > 9 && pokemon.pokemon_id <= 99) {
+        return '0' + pokemon.pokemon_id;
+      } 
+      if (pokemon.pokemon_id > 99) {
+        return pokemon.pokemon_id;
+      }
+    },
     async getPokemons() {
       this.loading = true;
       try {
@@ -194,10 +206,9 @@ export default {
                 'b663b6236fmsh5b27a567601af4cp110cd7jsnf15d8987a17d',
             },
           }
-        );
-        this.pokemons = response.data;
+        );    
+        this.pokemons = response.data
         this.loading = false;
-        console.log(this.pokemons)
       } catch (e) {
         console.error(e);
       }
