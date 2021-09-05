@@ -1,26 +1,26 @@
 <template>
   <v-container>
-    <v-card class="ma-2" v-for="(pokemon, id) in pokemons" :key="id">
+    <v-card class="ma-2" v-for="(pokemon, id) in searchResultData" :key="id">
       <v-list-item three-line>
         <v-list-item-content class="ma-2">
           <v-list-item-title class="text-h5 mb-1">{{
-            pokemon["pokemon_name"]
+            pokemon['pokemon_name']
           }}</v-list-item-title>
-          <v-list-item-subtitle>{{ pokemon["form"] }}</v-list-item-subtitle>
+          <v-list-item-subtitle>{{ pokemon['form'] }}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-avatar tile size="80" color="grey">
           <img
             v-bind:src="
               'https://raw.githubusercontent.com/Purukitto/pokemon-data.json/master/images/pokedex/thumbnails/' +
-              getTrueArray(pokemon) +
-              '.png'
+                getTrueArray(pokemon) +
+                '.png'
             "
             alt="pokemon.png"
           />
         </v-list-item-avatar>
       </v-list-item>
-       <p class="ma-2 ml-6">Type:</p>
+      <p class="ma-2 ml-6">Type:</p>
       <v-card-actions>
         <div class="d-flex justify-content-center ma-2">
           <div
@@ -31,11 +31,11 @@
             rounded
             text
           >
-            {{ poki}}
+            {{ poki }}
           </div>
         </div>
       </v-card-actions>
-        <p class="ma-2 ml-6">Weakness:</p>
+      <p class="ma-2 ml-6">Weakness:</p>
       <v-card-actions>
         <div class="d-flex justify-content-center ma-2">
           <p
@@ -46,7 +46,7 @@
             rounded
             text
           >
-            {{ weakness}}
+            {{ weakness }}
           </p>
         </div>
       </v-card-actions>
@@ -59,6 +59,7 @@ import axios from "axios";
 
 export default {
   name: "HelloWorld",
+  props: ["searchData"],
   data: () => {
     return {
       pokemons: [],
@@ -223,6 +224,15 @@ export default {
         console.error(e);
       }
     },
-  },
-};
+},
+  computed: {
+    searchResultData() {
+      return this.pokemons.filter((item) => {
+        return Object.values(item).some((m) =>
+          m.toString().includes(this.searchData)
+        )
+      })
+    }
+  }
+}
 </script>
